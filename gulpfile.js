@@ -2,6 +2,7 @@
 var gulp = require('gulp');
 var babel = require('gulp-babel');
 var karma = require('karma').server;
+var eslint = require('gulp-eslint');
 var rimraf = require('rimraf');
 var webpack = require('gulp-webpack');
 var typescript = require('gulp-typescript');
@@ -38,6 +39,11 @@ var paths = {
   name: {
     main: 'main.bundle.js',
     test: 'test.bundle.js'
+  },
+  glob: {
+    ts: '/**/*.ts',
+    es6: '/**/*.es6',
+    js: '/**/*.js'
   }
 };
 
@@ -45,6 +51,12 @@ var paths = {
 function babelOptions() {
   return {
     optional: ['runtime']
+  };
+}
+
+function eslintOptions() {
+  return {
+    configFile: 'eslint.json'
   };
 }
 
@@ -82,8 +94,15 @@ gulp.task('clean', function (done) {
   rimraf(paths.dest.base, done);
 });
 
-gulp.task('compile:main:ts', function () {
-  var tsResults = gulp.src(paths.src.main + '/**/*.ts')
+gulp.task('lint:main:es6', function () {
+  return gulp.src(paths.src.main + paths.glob.es6)
+    .pipe(eslint(eslintOptions()))
+    .pipe(eslint.format())
+    .pipe(eslint.failOnError());
+});
+
+gulp.task('compile:main:ts', ['lint'], function () {
+  var tsResults = gulp.src(paths.src.main + paths.glob.ts)
     .pipe(typescript(typescriptOptions()));
     
   return tsResults.js
@@ -91,19 +110,19 @@ gulp.task('compile:main:ts', function () {
     .pipe(gulp.dest(paths.dest.main));
 });
 
-gulp.task('compile:main:es6', function () {
-  return gulp.src(paths.src.main + '/**/*.es6')
+gulp.task('compile:main:es6', ['lint'], function () {
+  return gulp.src(paths.src.main + paths.glob.es6)
     .pipe(babel(babelOptions))
     .pipe(gulp.dest(paths.dest.main));
 });
 
-gulp.task('compile:main:js', function () {
-  return gulp.src(paths.src.main + '/**/*.js')
+gulp.task('compile:main:js', ['lint'], function () {
+  return gulp.src(paths.src.main + paths.glob.js)
     .pipe(gulp.dest(paths.dest.main));
 });
 
-gulp.task('compile:test:ts', function () {
-  var tsResults = gulp.src(paths.src.test + '/**/*.ts')
+gulp.task('compile:test:ts', ['lint'], function () {
+  var tsResults = gulp.src(paths.src.test + paths.glob.ts)
     .pipe(typescript(typescriptOptions()));
     
   return tsResults.js
@@ -111,25 +130,25 @@ gulp.task('compile:test:ts', function () {
     .pipe(gulp.dest(paths.dest.test));
 });
 
-gulp.task('compile:test:es6', function () {
-  return gulp.src(paths.src.test + '/**/*.es6')
+gulp.task('compile:test:es6', ['lint'], function () {
+  return gulp.src(paths.src.test + paths.glob.es6)
     .pipe(babel(babelOptions))  
     .pipe(gulp.dest(paths.dest.test));
 });
 
-gulp.task('compile:test:js', function () {
-  return gulp.src(paths.src.test + '/**/*.js')
+gulp.task('compile:test:js', ['lint'], function () {
+  return gulp.src(paths.src.test + paths.glob.js)
     .pipe(gulp.dest(paths.dest.test));
 });
 
 gulp.task('package:main', ['compile'], function () {
-  return gulp.src(paths.dest.main + '/**/*.js')
+  return gulp.src(paths.dest.main + paths.glob.js)
     .pipe(webpack(webpackOptions(paths.name.main)))
     .pipe(gulp.dest(paths.dest.pack));
 });
 
 gulp.task('package:test', ['compile'], function () {
-  return gulp.src(paths.dest.test + '/**/*.js')
+  return gulp.src(paths.dest.test + paths.glob.js)
     .pipe(webpack(webpackOptions(paths.name.test)))
     .pipe(gulp.dest(paths.dest.pack));
 });
@@ -140,6 +159,8 @@ gulp.task('test', ['package'], function (done) {
   });
 });
 
+gulp.task('lint:main', ['lint:main:es6']);
+gulp.task('lint', ['lint:main']);
 gulp.task('compile:main', ['compile:main:ts', 'compile:main:es6', 'compile:main:js']);
 gulp.task('compile:test', ['compile:test:ts', 'compile:test:es6', 'compile:test:js']);
 gulp.task('compile', ['compile:main', 'compile:test']);
