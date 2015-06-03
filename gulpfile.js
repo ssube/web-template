@@ -112,10 +112,7 @@ gulp.task('compile:test:ts', function () {
 });
 
 gulp.task('compile:test:es6', function () {
-  var tsResults = gulp.src(paths.src.test + '/**/*.es6')
-    .pipe(typescript(typescriptOptions()));
-    
-  return tsResults.js
+  return gulp.src(paths.src.test + '/**/*.es6')
     .pipe(babel(babelOptions))  
     .pipe(gulp.dest(paths.dest.test));
 });
@@ -138,7 +135,7 @@ gulp.task('package:test', ['compile'], function () {
 });
 
 gulp.task('test', ['package'], function (done) {
-  karma.start(karmaOptions, function () {
+  karma.start(karmaOptions(), function () {
     done(); // this avoids a gulp error when karma fails, but reporters show the error
   });
 });
