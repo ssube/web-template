@@ -1,0 +1,4 @@
+{
+	"karma.reporters": ["progress"],
+	"karma.browsers": ["PhantomJS"]
+}

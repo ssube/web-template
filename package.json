@@ -1,0 +1,22 @@
+{
+  "name": "web-template",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "gulp test"
+  },
+  "author": "buildsvc <buildsvc@redbrickhealth.com>",
+  "license": "ISC",
+  "devDependencies": {
+    "gulp": "^3.9.0",
+    "gulp-babel": "^5.1.0",
+    "gulp-typescript": "^2.7.6",
+    "gulp-webpack": "^1.4.0",
+    "karma": "^0.12.35",
+    "node-libs-browser": "^0.5.2",
+    "rimraf": "^2.3.4",
+    "typescript": "^1.5.0-beta",
+    "webpack": "^1.9.10"
+  }
+}
