@@ -1,6 +1,3 @@
-/// reference path="../../DefinitelyTyped/chai/chai.d.ts"
-/// reference path="../../DefinitelyTyped/mocha/mocha.d.ts"
-
 import {expect} from 'chai';
 import ExampleParams from '../main/ExampleParams';
 
