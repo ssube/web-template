@@ -43,7 +43,8 @@ var paths = {
   glob: {
     ts: '/**/*.ts',
     es6: '/**/*.es6',
-    js: '/**/*.js'
+    js: '/**/*.js',
+    res: ['/**/*.hbs', '/**/*.html', '/**/*.less', '/**/*.css']
   }
 };
 
@@ -92,6 +93,16 @@ function webpackOptions(name) {
 // Tasks
 gulp.task('clean', function (done) {
   rimraf(paths.dest.base, done);
+});
+
+gulp.task('copy:manifest', function () {
+  return gulp.src('package.json')
+    .pipe(gulp.dest(paths.dest.base));
+});
+
+gulp.task('copy:resource', function () {
+  return gulp.src(paths.src.main + paths.glob.res)
+    .pipe(gulp.dest(paths.dest.main));
 });
 
 gulp.task('lint:main:es6', function () {
@@ -159,10 +170,11 @@ gulp.task('test', ['package'], function (done) {
   });
 });
 
+gulp.task('copy', ['copy:manifest', 'copy:resource']);
 gulp.task('lint:main', ['lint:main:es6']);
 gulp.task('lint', ['lint:main']);
 gulp.task('compile:main', ['compile:main:ts', 'compile:main:es6', 'compile:main:js']);
 gulp.task('compile:test', ['compile:test:ts', 'compile:test:es6', 'compile:test:js']);
 gulp.task('compile', ['compile:main', 'compile:test']);
 gulp.task('package', ['package:main', 'package:test']);
-gulp.task('default', ['compile', 'package', 'test']);
+gulp.task('default', ['copy', 'compile', 'package', 'test']);
