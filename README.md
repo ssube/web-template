@@ -1,5 +1,7 @@
+Need to hit a REST API from a single-page app? This will get you started.
+
 # Web Template
-This is a light-weight template for building packaged, tested web applications.
+This is a light-weight template for building packaged, tested front-end-only web applications.
 
 A bootstrap webpage and server are built in, allowing this repository to be a fully
 functional single-page app.
