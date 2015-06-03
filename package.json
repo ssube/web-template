@@ -11,6 +11,7 @@
   "devDependencies": {
     "babel-eslint": "^3.1.10",
     "chai": "^2.3.0",
+    "css-loader": "^0.14.4",
     "gulp": "^3.9.0",
     "gulp-babel": "^5.1.0",
     "gulp-eslint": "^0.13.0",
@@ -22,10 +23,14 @@
     "karma": "^0.12.35",
     "karma-mocha": "^0.1.10",
     "karma-phantomjs-launcher": "^0.2.0",
+    "less": "^2.5.1",
+    "less-loader": "^2.2.0",
     "mocha": "^2.2.5",
     "node-libs-browser": "^0.5.2",
     "phantomjs": "^1.9.17",
+    "phantomjs-polyfill": "0.0.1",
     "rimraf": "^2.3.4",
+    "style-loader": "^0.12.3",
     "typescript": "^1.5.0-beta",
     "webpack": "^1.9.10"
   }

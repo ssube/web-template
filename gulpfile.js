@@ -69,6 +69,7 @@ function karmaOptions() {
   return {
     singleRun: true,
     files: [
+      './node_modules/phantomjs-polyfill/bind-polyfill.js',
       paths.dest.pack + '/' + paths.name.test
     ],
     frameworks: ['mocha'],
@@ -89,7 +90,9 @@ function webpackOptions(name) {
   return {
     module: {
       loaders: [
-        {test: /\.hbs$/, loader: 'handlebars-loader'}
+        {test: /\.css$/, loaders: ['style-loader', 'css-loader']},
+        {test: /\.hbs$/, loaders: ['handlebars-loader']},
+        {test: /\.less$/, loaders: ['style-loader', 'css-loader', 'less-loader']}
       ]
     },
     output: {
