@@ -1,14 +1,21 @@
 # Web Template
 This is a light-weight template for building packaged, tested web applications.
 
-Support is built in for ES6 and Typescript, testing with Mocha via Karma, use of
-promises, and other common necessities.
-
 A boostrap webpage and server are built in, allowing this repository to be a fully
 functional single-page app.
 
-It is *not* opinionated on MV* frameworks, but does provide some suggestions on
-template and styling languages (Handlebars and LESS, respectively).
+## What's Provided?
+This project will build itself, serve itself, and render a key from the configuration
+onto the page with some styling.
+
+That should be enough to show Webpack working with Babel, Handlebars, and LESS. To
+make things fun, Karma gets in the mix to handle testing with PhantomJS.
+
+For the strongly-typed, basic support for Typescript is in place but needs the 1.5
+release to work fully.
+
+## What's Missing?
+There are no MV* frameworks included. Source maps and code coverage are not set up yet.
 
 ## Build
 ```
