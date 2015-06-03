@@ -44,8 +44,11 @@ var paths = {
   glob: {
     ts: '/**/*.ts',
     es6: '/**/*.es6',
-    js: '/**/*.js',
-    res: ['/**/*.hbs', '/**/*.html', '/**/*.less', '/**/*.css']
+    js: '/**/*.js'
+  },
+  resource: {
+    main: ['/**/*.hbs', '/**/*.less', '/**/*.css'],
+    pack: ['/index.html', '/conf.json']
   }
 };
 
@@ -154,9 +157,20 @@ gulp.task('copy:manifest', function () {
     .pipe(gulp.dest(paths.dest.base));
 });
 
-gulp.task('copy:resource', function () {
-  return gulp.src(paths.src.main + paths.glob.res)
+gulp.task('copy:resource:main', function () {
+  var fullPaths = paths.resource.main.map(function (path) {
+    return paths.src.main + path;
+  });
+  return gulp.src(fullPaths)
     .pipe(gulp.dest(paths.dest.main));
+});
+
+gulp.task('copy:resource:pack', function () {
+  var fullPaths = paths.resource.pack.map(function (path) {
+    return paths.src.main + path;
+  });
+  return gulp.src(fullPaths)
+    .pipe(gulp.dest(paths.dest.pack));
 });
 
 gulp.task('lint:main:es6', function () {
@@ -192,6 +206,7 @@ gulp.task('serve', ['default'], function () {
 gulp.task('compile:main', ['compile:main:es6', 'compile:main:js', 'compile:main:ts']);
 gulp.task('compile:test', ['compile:test:es6', 'compile:test:js', 'compile:test:ts']);
 gulp.task('compile', ['compile:main', 'compile:test']);
+gulp.task('copy:resource', ['copy:resource:main', 'copy:resource:pack']);
 gulp.task('copy', ['copy:manifest', 'copy:resource']);
 gulp.task('lint:main', ['lint:main:es6']);
 gulp.task('lint', ['lint:main']);

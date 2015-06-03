@@ -1,0 +1,64 @@
+<!doctype html>
+<html class="no-js" lang="">
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ui-compatible" content="ie=edge">
+    <title>Web Template</title>
+    <meta name="description" content="Web Template">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.4/css/bootstrap.min.css">
+  </head>
+  
+  <body>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12 app-container">
+          <!-- app contents -->
+        </div>
+      </div>
+    </div>
+    <!-- Scripts -->
+    <script type="application/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.17/require.min.js"></script>
+    <script type="application/javascript">
+      require.config({
+        map: {
+          '*': {
+            'underscore': 'lodash'
+          }
+        },
+        paths: {
+          bluebird: 'https://cdnjs.cloudflare.com/ajax/libs/bluebird/2.9.25/bluebird.min',
+          bootstrap: 'https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.4/js/bootstrap',
+          conf: 'conf.json',
+          jquery: 'https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min',
+          json: 'https://cdnjs.cloudflare.com/ajax/libs/requirejs-plugins/1.0.3/json.min',
+          main: 'main.bundle',
+          text: 'https://cdnjs.cloudflare.com/ajax/libs/require-text/2.0.12/text.min',
+          lodash: 'https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.9.0/lodash.min'
+        },
+        shim: {
+          bootstrap: {
+            deps: ['jquery']
+          },
+          lodash: {
+            exports: '_'
+          },
+          jquery: {
+            exports: '$'
+          }
+        }
+      });
+
+      var preload = ['jquery', 'lodash', 'bootstrap', 'json!conf', 'main'];
+
+      require(preload, function ($, _, bs, conf, main) {
+        $(function () {
+          main(conf);
+        });
+      });
+    </script>
+  </body>
+
+</html>
