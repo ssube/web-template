@@ -5,6 +5,7 @@ var karma = require('karma').server;
 var eslint = require('gulp-eslint');
 var rimraf = require('rimraf');
 var webpack = require('gulp-webpack');
+var webserver = require('gulp-webserver');
 var typescript = require('gulp-typescript');
 
 // Import options
@@ -95,9 +96,57 @@ function webpackOptions(name) {
   };
 }
 
+function webserverOptions() {
+  return {
+    host: '0.0.0.0',
+    path: '/',
+    port: '8000'
+  };
+}
+
 // Tasks
 gulp.task('clean', function (done) {
   rimraf(paths.dest.base, done);
+});
+
+gulp.task('compile:main:es6', ['lint'], function () {
+  return gulp.src(paths.src.main + paths.glob.es6)
+    .pipe(babel(babelOptions))
+    .pipe(gulp.dest(paths.dest.main));
+});
+
+gulp.task('compile:main:js', ['lint'], function () {
+  return gulp.src(paths.src.main + paths.glob.js)
+    .pipe(gulp.dest(paths.dest.main));
+});
+
+gulp.task('compile:main:ts', ['lint'], function () {
+  var tsResults = gulp.src(paths.src.main + paths.glob.ts)
+    .pipe(typescript(typescriptOptions()));
+    
+  return tsResults.js
+    .pipe(babel(babelOptions))
+    .pipe(gulp.dest(paths.dest.main));
+});
+
+gulp.task('compile:test:es6', ['lint'], function () {
+  return gulp.src(paths.src.test + paths.glob.es6)
+    .pipe(babel(babelOptions))  
+    .pipe(gulp.dest(paths.dest.test));
+});
+
+gulp.task('compile:test:js', ['lint'], function () {
+  return gulp.src(paths.src.test + paths.glob.js)
+    .pipe(gulp.dest(paths.dest.test));
+});
+
+gulp.task('compile:test:ts', ['lint'], function () {
+  var tsResults = gulp.src(paths.src.test + paths.glob.ts)
+    .pipe(typescript(typescriptOptions()));
+    
+  return tsResults.js
+    .pipe(babel(babelOptions))  
+    .pipe(gulp.dest(paths.dest.test));
 });
 
 gulp.task('copy:manifest', function () {
@@ -115,46 +164,6 @@ gulp.task('lint:main:es6', function () {
     .pipe(eslint(eslintOptions()))
     .pipe(eslint.format())
     .pipe(eslint.failOnError());
-});
-
-gulp.task('compile:main:ts', ['lint'], function () {
-  var tsResults = gulp.src(paths.src.main + paths.glob.ts)
-    .pipe(typescript(typescriptOptions()));
-    
-  return tsResults.js
-    .pipe(babel(babelOptions))
-    .pipe(gulp.dest(paths.dest.main));
-});
-
-gulp.task('compile:main:es6', ['lint'], function () {
-  return gulp.src(paths.src.main + paths.glob.es6)
-    .pipe(babel(babelOptions))
-    .pipe(gulp.dest(paths.dest.main));
-});
-
-gulp.task('compile:main:js', ['lint'], function () {
-  return gulp.src(paths.src.main + paths.glob.js)
-    .pipe(gulp.dest(paths.dest.main));
-});
-
-gulp.task('compile:test:ts', ['lint'], function () {
-  var tsResults = gulp.src(paths.src.test + paths.glob.ts)
-    .pipe(typescript(typescriptOptions()));
-    
-  return tsResults.js
-    .pipe(babel(babelOptions))  
-    .pipe(gulp.dest(paths.dest.test));
-});
-
-gulp.task('compile:test:es6', ['lint'], function () {
-  return gulp.src(paths.src.test + paths.glob.es6)
-    .pipe(babel(babelOptions))  
-    .pipe(gulp.dest(paths.dest.test));
-});
-
-gulp.task('compile:test:js', ['lint'], function () {
-  return gulp.src(paths.src.test + paths.glob.js)
-    .pipe(gulp.dest(paths.dest.test));
 });
 
 gulp.task('package:main', ['compile'], function () {
@@ -175,11 +184,18 @@ gulp.task('test', ['package'], function (done) {
   });
 });
 
+gulp.task('serve', ['default'], function () {
+  gulp.src(paths.dest.pack)
+    .pipe(webserver(webserverOptions()));
+});
+
+gulp.task('compile:main', ['compile:main:es6', 'compile:main:js', 'compile:main:ts']);
+gulp.task('compile:test', ['compile:test:es6', 'compile:test:js', 'compile:test:ts']);
+gulp.task('compile', ['compile:main', 'compile:test']);
 gulp.task('copy', ['copy:manifest', 'copy:resource']);
 gulp.task('lint:main', ['lint:main:es6']);
 gulp.task('lint', ['lint:main']);
-gulp.task('compile:main', ['compile:main:ts', 'compile:main:es6', 'compile:main:js']);
-gulp.task('compile:test', ['compile:test:ts', 'compile:test:es6', 'compile:test:js']);
-gulp.task('compile', ['compile:main', 'compile:test']);
 gulp.task('package', ['package:main', 'package:test']);
+
+// Default task
 gulp.task('default', ['copy', 'compile', 'package', 'test']);
