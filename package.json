@@ -10,6 +10,7 @@
   "license": "ISC",
   "devDependencies": {
     "babel-eslint": "^3.1.10",
+    "bluebird": "^2.9.27",
     "chai": "^2.3.0",
     "css-loader": "^0.14.4",
     "gulp": "^3.9.0",

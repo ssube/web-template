@@ -88,6 +88,12 @@ function typescriptOptions() {
 
 function webpackOptions(name) {
   return {
+    externals: {
+      jquery: {
+        root: 'jquery',
+        amd: 'jquery'
+      }
+    },
     module: {
       loaders: [
         {test: /\.css$/, loaders: ['style-loader', 'css-loader']},
