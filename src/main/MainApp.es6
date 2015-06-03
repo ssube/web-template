@@ -17,6 +17,7 @@ export default class MainApp {
       let el = this._params.el;
       el.empty();
       el.append(this._params.welcome);
+      res(this);
     });
   }
 }
