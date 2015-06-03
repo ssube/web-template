@@ -83,6 +83,11 @@ function typescriptOptions() {
 
 function webpackOptions(name) {
   return {
+    module: {
+      loaders: [
+        {test: /\.hbs$/, loader: 'handlebars-loader'}
+      ]
+    },
     output: {
       filename: name,
       libraryTarget: 'umd'
