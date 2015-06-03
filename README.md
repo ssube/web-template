@@ -1,7 +1,7 @@
 # Web Template
 This is a light-weight template for building packaged, tested web applications.
 
-A boostrap webpage and server are built in, allowing this repository to be a fully
+A bootstrap webpage and server are built in, allowing this repository to be a fully
 functional single-page app.
 
 ## What's Provided?
