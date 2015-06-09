@@ -11,7 +11,7 @@ var typescript = require('gulp-typescript');
 
 // Import options
 function getBuildOptions(file) {
-  var options = require('.' + path.sep + file);
+  var options = require('./' + file);
   var home = process.env.USERPROFILE || process.env.HOME;
   try {
     var overrides = require(path.join(home, file));
