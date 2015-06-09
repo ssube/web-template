@@ -13,11 +13,9 @@ export default class MainApp {
   }
 
   render() {
-    return new Promise(res => {
-      let el = this._params.el;
-      el.empty();
-      el.append(this._params.welcome);
-      res(this);
-    });
+    let el = this._params.el;
+    el.empty();
+    el.append(this._params.welcome);
+    return Promise.resolve(this);
   }
 }
