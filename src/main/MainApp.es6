@@ -1,4 +1,5 @@
 import './main.less';
+import templateMain from './main-template.hbs';
 import Promise from 'bluebird';
 
 export default class MainApp {
@@ -13,7 +14,10 @@ export default class MainApp {
   render() {
     let el = this._params.el;
     el.empty();
-    el.append(this._params.welcome);
+    el.append(templateMain({
+      welcome: this._params.welcome
+    }));
+
     return Promise.resolve(this);
   }
 }
