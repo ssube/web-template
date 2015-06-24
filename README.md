@@ -11,13 +11,12 @@ This project will build itself, serve itself, and render a key from the configur
 onto the page with some styling.
 
 That should be enough to show Webpack working with Babel, Handlebars, and LESS. To
-make things fun, Karma gets in the mix to handle testing with PhantomJS.
-
-For the strongly-typed, basic support for Typescript is in place but needs the 1.5
-release to work fully.
+make things fun, Karma gets in the mix to handle testing with PhantomJS and produce code coverage.
 
 ## What's Missing?
-There are no MV* frameworks included. Source maps and code coverage are not set up yet.
+Source maps are not set up yet.
+
+There are no MV* frameworks included, but this structure should work with most.
 
 ## Build
 ```
