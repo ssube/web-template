@@ -5,7 +5,7 @@ var babel = require('gulp-babel');
 var karma = require('karma').server;
 var eslint = require('gulp-eslint');
 var rimraf = require('rimraf');
-var webpack = require('gulp-webpack');
+var webpack = require('webpack-stream');
 var webserver = require('gulp-webserver');
 
 // Import options
