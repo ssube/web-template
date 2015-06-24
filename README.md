@@ -29,3 +29,9 @@ gulp
 npm install
 gulp serve
 ```
+
+## Potential Errors
+### webpack entry point dependencies
+
+If you receive an error from webpack about depending on entry points, make sure you aren't importing any files
+that are also considered valid tests. This error is the reason behind the `**/test-*` filter on test files.
