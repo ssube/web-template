@@ -10,13 +10,13 @@ functional single-page app.
 This project will build itself, serve itself, and render a key from the configuration
 onto the page with some styling.
 
-That should be enough to show Webpack working with Babel, Handlebars, and LESS. To
-make things fun, Karma gets in the mix to handle testing with PhantomJS and produce code coverage.
+That should be enough to show Webpack working with Babel, Handlebars, and LESS, with source maps enabled.
+
+To make things fun, Karma gets in the mix to handle testing with your preferred browsers (falling back to
+PhantomJS) and produces code coverage reports for the ES6 code.
 
 ## What's Missing?
-Source maps are not set up yet.
-
-There are no MV* frameworks included, but this structure should work with most.
+There are no MV* frameworks included, but this structure should work with most existing frameworks.
 
 ## Build
 ```

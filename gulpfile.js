@@ -1,7 +1,6 @@
 // Import packages
 var gulp = require('gulp');
 var path = require('path');
-var babel = require('gulp-babel');
 var karma = require('karma').server;
 var eslint = require('gulp-eslint');
 var rimraf = require('rimraf');
@@ -49,18 +48,11 @@ var paths = {
     test: '**/test-*.es6'
   },
   resource: {
-    main: ['**/*.hbs', '**/*.less', '**/*.css'],
     pack: ['index.html', 'conf.json']
   }
 };
 
 // Library options
-function babelOptions() {
-  return {
-    optional: ['runtime']
-  };
-}
-
 function eslintOptions() {
   return {
     configFile: 'eslint.json'
@@ -104,6 +96,14 @@ function webpackOptions(name, test) {
     },
     module: {
       preLoaders: [
+        {
+          test: /\.es6$/,
+          include: path.resolve(paths.src.base),
+          loader: 'babel-loader',
+          query: {
+            optional: ['runtime']
+          }
+        },
         {test: /\.js$/, loaders: ['source-map-loader']}
       ],
       loaders: [
@@ -122,18 +122,15 @@ function webpackOptions(name, test) {
     },
     resolve: {
       extensions: ['', '.es6', '.js'],
-      root: path.join(__dirname, paths.dest.main)
+      root: path.join(__dirname, paths.src.main)
     }
   };
 
   // Modify the settings to instrument tests
   if (test) {
     options.module.preLoaders.push({
-      test: /\.es6$/, include: path.resolve(paths.src.base), loader: 'babel-loader?optional[]=runtime'
-    }, {
       test: /\.es6$/, include: path.resolve(paths.src.main), loader: 'isparta'
     });
-    options.resolve.root = path.join(__dirname, paths.src.main);
   }
 
   return options;
@@ -152,39 +149,9 @@ gulp.task('clean', function (done) {
   rimraf(paths.dest.base, done);
 });
 
-gulp.task('compile:main:es6', ['lint'], function () {
-  return gulp.src(path.join(paths.src.main, paths.glob.es6))
-    .pipe(babel(babelOptions))
-    .pipe(gulp.dest(paths.dest.main));
-});
-
-gulp.task('compile:main:js', ['lint'], function () {
-  return gulp.src(path.join(paths.src.main, paths.glob.js))
-    .pipe(gulp.dest(paths.dest.main));
-});
-
-gulp.task('compile:test:es6', ['lint'], function () {
-  return gulp.src(path.join(paths.src.test, paths.glob.es6))
-    .pipe(babel(babelOptions))
-    .pipe(gulp.dest(paths.dest.test));
-});
-
-gulp.task('compile:test:js', ['lint'], function () {
-  return gulp.src(path.join(paths.src.test, paths.glob.js))
-    .pipe(gulp.dest(paths.dest.test));
-});
-
 gulp.task('copy:manifest', function () {
   return gulp.src('package.json')
     .pipe(gulp.dest(paths.dest.base));
-});
-
-gulp.task('copy:resource:main', function () {
-  var fullPaths = paths.resource.main.map(function (glob) {
-    return path.join(paths.src.main, glob);
-  });
-  return gulp.src(fullPaths)
-    .pipe(gulp.dest(paths.dest.main));
 });
 
 gulp.task('copy:resource:pack', function () {
@@ -202,8 +169,8 @@ gulp.task('lint:main:es6', function () {
     .pipe(eslint.failOnError());
 });
 
-gulp.task('package:main', ['compile'], function () {
-  return gulp.src(path.join(paths.dest.main, paths.glob.js))
+gulp.task('package:main', ['lint'], function () {
+  return gulp.src(path.join(paths.src.main, paths.glob.es6))
     .pipe(webpack(webpackOptions(paths.name.main, false)))
     .pipe(gulp.dest(paths.dest.pack));
 });
@@ -220,14 +187,11 @@ gulp.task('serve', ['default'], function () {
 });
 
 // Group tasks
-gulp.task('compile:main', ['compile:main:es6', 'compile:main:js']);
-gulp.task('compile:test', ['compile:test:es6', 'compile:test:js']);
-gulp.task('compile', ['compile:main', 'compile:test']);
-gulp.task('copy:resource', ['copy:resource:main', 'copy:resource:pack']);
+gulp.task('copy:resource', ['copy:resource:pack']);
 gulp.task('copy', ['copy:manifest', 'copy:resource']);
 gulp.task('lint:main', ['lint:main:es6']);
 gulp.task('lint', ['lint:main']);
 gulp.task('package', ['package:main']);
 
 // Default task
-gulp.task('default', ['copy', 'compile', 'package', 'test']);
+gulp.task('default', ['copy', 'package', 'test']);

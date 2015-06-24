@@ -1,7 +1,5 @@
-import style from './main.less';
+import './main.less';
 import Promise from 'bluebird';
-
-style; // "Use" the style variable
 
 export default class MainApp {
   constructor(params) {
