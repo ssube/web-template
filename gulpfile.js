@@ -6,8 +6,10 @@ var eslint = require('gulp-eslint');
 var rimraf = require('rimraf');
 var webpack = require('webpack-stream');
 var webserver = require('gulp-webserver');
+var minimist = require('minimist');
 
-// Import options
+var cliOptions = minimist(process.argv.slice(2))
+
 function getBuildOptions(file) {
   var options = require(path.join(__dirname, file));
   var home = process.env.USERPROFILE || process.env.HOME;
@@ -138,9 +140,9 @@ function webpackOptions(name, test) {
 
 function webserverOptions() {
   return {
-    host: '0.0.0.0',
-    path: '/',
-    port: '8000'
+    host: cliOptions.host || '0.0.0.0',
+    path: cliOptions.path || '/',
+    port: cliOptions.port || '8000'
   };
 }
 
